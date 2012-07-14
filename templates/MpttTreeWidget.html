@@ -1,0 +1,43 @@
+{% load mptt_tags i18n %}
+
+<div class="clear"></div>
+
+<style type="text/css">
+    .manage-treeview li { list-style: none;  }
+    form .aligned ul.manage-treeview, form .aligned ul.manage-treeview ul { padding: 0; margin: 0; }
+</style>
+
+<div class="treeview-control">
+    <a href="#">{% trans "Collapse all" %}</a> |
+    <a href="#">{% trans "Expand all" %}</a>
+</div>
+
+<ul class="manage-treeview">
+    {% recursetree queryset %}
+        <li>
+            <input type="checkbox" name="{{ name }}" value="{{ node.pk }}" id="id_{{ name }}_{{ node.pk }}" {% if node.pk in value %}checked="checked"{% endif %}>
+            <label for="id_{{ name }}_{{ node.pk }}">{{ node.name }}</label>
+            {% if not node.is_leaf_node %}
+                <ul>
+                    {{ children }}
+                </ul>
+            {% endif %}
+        </li>
+    {% endrecursetree %}
+</ul>
+
+<script type="text/javascript">
+    (function($){
+        $(':checkbox[name={{ name }}]').change(function(){
+            if($(this).is(':checked')){
+                var parents = $(this).parents('li');
+                console.log(parents);
+                for(var i=0; i < parents.length; i++ ){
+                    var checkbox = $(parents[i]).children(':checkbox');
+                    checkbox.attr('checked', 'checked');
+                }
+            }
+        });
+    })(jQuery);
+</script>
+
