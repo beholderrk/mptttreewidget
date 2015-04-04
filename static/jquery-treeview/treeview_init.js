@@ -7,4 +7,4 @@
             control: ".treeview-control"
         });
     });
-})(jQuery);
+})(django.jQuery);
